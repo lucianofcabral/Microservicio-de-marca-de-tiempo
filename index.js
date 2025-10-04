@@ -29,7 +29,8 @@ app.get("/api/:date?", function (req, res) {
     date = new Date();
   } else {
     // Verificar si es un número (timestamp Unix)
-    if (!isNaN(dateParam)) {
+    if (/^\d+$/.test(dateParam)) {
+      // Es un número, convertir a timestamp Unix
       date = new Date(parseInt(dateParam));
     } else {
       // Intentar parsear como string de fecha
@@ -38,7 +39,7 @@ app.get("/api/:date?", function (req, res) {
   }
 
   // Verificar si la fecha es válida
-  if (date.toString() === "Invalid Date") {
+  if (isNaN(date.getTime())) {
     return res.json({ error: "Invalid Date" });
   }
 
